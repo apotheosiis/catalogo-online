@@ -1,0 +1,9 @@
+# Arquivos de configuração sensíveis
+.env
+
+# Arquivos de dependências (se usar Composer)
+/vendor/
+
+# Arquivos de log e temporários
+*.log
+*.tmp
