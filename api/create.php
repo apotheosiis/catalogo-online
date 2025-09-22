@@ -2,13 +2,16 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once '../config/db.php';
 
+    // Variáveis com verificação de existência (boa prática)
     $nome = $_POST['nome'] ?? '';
     $descricao = $_POST['descricao'] ?? '';
-    $preco = $_POST['preco'] ?? 0;
-    $imagem = $_POST['imagem'] ?? 'default.jpg';
+    $preco = $_POST['preco'] ?? '';
+    $imagem = $_POST['imagem'] ?? '';
 
-    if (empty($nome) || empty($descricao) || empty($preco)) {
-        header('Location: ../crud.php?status=error&message=Preencha todos os campos.');
+    // Validação no lado do servidor (essencial!)
+    if (empty($nome) || empty($descricao) || empty($preco) || empty($imagem)) {
+        // Redireciona de volta com um erro claro se algum campo estiver vazio
+        header('Location: ../admin/crud.php?status=error_empty');
         exit;
     }
 
@@ -18,9 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$nome, $descricao, $preco, $imagem]);
         
-        header('Location: ../crud.php?status=success&message=Produto criado com sucesso.');
+        // Redireciona para o caminho correto com um status de sucesso
+        header('Location: ../admin/crud.php?status=success_create');
+        exit;
     } catch (Exception $e) {
-        header('Location: ../crud.php?status=error&message=Erro ao criar produto.');
+        // Em caso de erro no banco, redireciona com status de erro
+        header('Location: ../admin/crud.php?status=error_db');
+        exit;
     }
 }
 ?>

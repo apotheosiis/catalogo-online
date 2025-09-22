@@ -12,14 +12,14 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Gerenciamento de Produtos</title>
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="../css/admin.css">
 </head>
 <body>
 
     <header class="admin-header">
         <h1>Dashboard</h1>
         <div class="header-nav">
-            <a href="index.php" target="_blank" class="btn btn-secondary">Ver Site</a>
+            <a href="../index.php" target="_blank" class="btn btn-secondary">Ver Site</a>
             <a href="logout.php" class="btn btn-danger">Sair</a>
         </div>
     </header>
@@ -27,7 +27,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <main class="admin-main">
         <div class="card">
             <h2 id="form-title">Adicionar Novo Produto</h2>
-            <form action="api/create.php" method="POST" id="productForm">
+            <form action="../api/create.php" method="POST" id="productForm">
                 <input type="hidden" name="id" id="productId">
                 
                 <label for="nome">Nome do Produto:</label>
@@ -63,7 +63,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     </thead>
                     <tbody>
                         <?php
-                        require_once 'config/db.php';
+                        require_once '../config/db.php';
                         $pdo = getDbConnection();
                         $stmt = $pdo->query("SELECT id, nome, preco, descricao, imagem FROM produtos ORDER BY id DESC");
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -73,7 +73,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                             echo "<td>R$ " . number_format($row['preco'], 2, ',', '.') . "</td>";
                             echo "<td class='actions'>
                                     <button class='btn btn-edit' onclick='editProduct(" . json_encode($row) . ")'>Editar</button>
-                                    <form action='api/delete.php' method='POST' onsubmit='return confirm(\"Tem certeza que deseja excluir este produto?\");'>
+                                    <form action='../api/delete.php' method='POST' onsubmit='return confirm(\"Tem certeza que deseja excluir este produto?\");'>
                                         <input type='hidden' name='id' value='" . $row['id'] . "'>
                                         <button type='submit' class='btn btn-delete'>Excluir</button>
                                     </form>
@@ -96,7 +96,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             document.getElementById('imagem').value = product.imagem;
             
             const form = document.getElementById('productForm');
-            form.action = 'api/update.php';
+            form.action = '../api/update.php';
             document.getElementById('formButton').textContent = 'Atualizar Produto';
             document.getElementById('form-title').textContent = 'Editar Produto: ' + product.nome;
             window.scrollTo(0, 0);
@@ -106,7 +106,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             const form = document.getElementById('productForm');
             form.reset();
             document.getElementById('productId').value = '';
-            form.action = 'api/create.php';
+            form.action = '../api/create.php';
             document.getElementById('formButton').textContent = 'Adicionar Produto';
             document.getElementById('form-title').textContent = 'Adicionar Novo Produto';
         }

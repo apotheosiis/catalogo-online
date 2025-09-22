@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config/db.php';
+require_once '../config/db.php';
 
 // --- IMPLEMENTAÇÃO DE SEGURANÇA CONTRA FORÇA BRUTA ---
 // 1. Inicializa o contador de tentativas se ele não existir na sessão.

@@ -2,14 +2,16 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once '../config/db.php';
 
-    $id = $_POST['id'] ?? 0;
+    // Variáveis com verificação de existência
+    $id = $_POST['id'] ?? '';
     $nome = $_POST['nome'] ?? '';
     $descricao = $_POST['descricao'] ?? '';
-    $preco = $_POST['preco'] ?? 0;
-    $imagem = $_POST['imagem'] ?? 'default.jpg';
+    $preco = $_POST['preco'] ?? '';
+    $imagem = $_POST['imagem'] ?? '';
 
-    if (empty($id) || empty($nome) || empty($descricao) || empty($preco)) {
-        header('Location: ../crud.php?status=error&message=Dados inválidos.');
+    // Validação no lado do servidor (essencial!)
+    if (empty($id) || empty($nome) || empty($descricao) || empty($preco) || empty($imagem)) {
+        header('Location: ../admin/crud.php?status=error_empty');
         exit;
     }
 
@@ -19,9 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$nome, $descricao, $preco, $imagem, $id]);
         
-        header('Location: ../crud.php?status=success&message=Produto atualizado com sucesso.');
+        // Redireciona para o caminho correto com um status de sucesso
+        header('Location: ../admin/crud.php?status=success_update');
+        exit;
     } catch (Exception $e) {
-        header('Location: ../crud.php?status=error&message=Erro ao atualizar produto.');
+        // Em caso de erro no banco, redireciona com status de erro
+        header('Location: ../admin/crud.php?status=error_db');
+        exit;
     }
 }
 ?>

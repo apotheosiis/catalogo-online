@@ -2,10 +2,12 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once '../config/db.php';
 
-    $id = $_POST['id'] ?? 0;
+    // Variável com verificação de existência
+    $id = $_POST['id'] ?? '';
 
+    // Validação no lado do servidor (essencial!)
     if (empty($id)) {
-        header('Location: ../crud.php?status=error&message=ID inválido.');
+        header('Location: ../admin/crud.php?status=error_no_id');
         exit;
     }
 
@@ -15,9 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
         
-        header('Location: ../crud.php?status=success&message=Produto excluído com sucesso.');
+        // Redireciona para o caminho correto com um status de sucesso
+        header('Location: ../admin/crud.php?status=success_delete');
+        exit;
     } catch (Exception $e) {
-        header('Location: ../crud.php?status=error&message=Erro ao excluir produto.');
+        // Em caso de erro no banco, redireciona com status de erro
+        header('Location: ../admin/crud.php?status=error_db');
+        exit;
     }
 }
 ?>

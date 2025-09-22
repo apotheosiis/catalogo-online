@@ -45,11 +45,11 @@ session_start();
             <p>&copy; <?php echo date('Y'); ?> TechShop - Todos os direitos reservados.</p>
             <div class="admin-links">
                 <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
-                    <a href="crud.php" class="admin-link">Painel Admin</a>
+                    <a href="admin/crud.php" class="admin-link">Painel Admin</a>
                     <span style="color: #6c757d;">|</span>
-                    <a href="logout.php" class="admin-link">Sair</a>
+                    <a href="admin/logout.php" class="admin-link">Sair</a>
                 <?php else: ?>
-                    <a href="login.php" class="admin-link">Área Administrativa</a>
+                    <a href="admin/login.php" class="admin-link">Área Administrativa</a>
                 <?php endif; ?>
             </div>
         </div>
