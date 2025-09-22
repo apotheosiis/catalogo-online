@@ -1,3 +1,7 @@
+<?php
+// Inicia a sessão para que possamos verificar se o usuário está logado
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -11,8 +15,6 @@
     <header class="header">
         <div class="container">
             <h1>TechShop</h1>
-            <h1>Gerenciamento de Produtos</h1>
-<a href="logout.php" style="float:right; margin:10px;">Sair</a>
             <p>Os melhores produtos de tecnologia você encontra aqui.</p>
         </div>
     </header>
@@ -40,8 +42,16 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 TechShop - Todos os direitos reservados.</p>
-            <p><a href="crud.php" class="admin-link">Área Administrativa</a></p>
+            <p>&copy; <?php echo date('Y'); ?> TechShop - Todos os direitos reservados.</p>
+            <div class="admin-links">
+                <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
+                    <a href="crud.php" class="admin-link">Painel Admin</a>
+                    <span style="color: #6c757d;">|</span>
+                    <a href="logout.php" class="admin-link">Sair</a>
+                <?php else: ?>
+                    <a href="login.php" class="admin-link">Área Administrativa</a>
+                <?php endif; ?>
+            </div>
         </div>
     </footer>
 

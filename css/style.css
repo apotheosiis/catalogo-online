@@ -2,10 +2,10 @@
 :root {
     --primary-color: #3498db;
     --secondary-color: #2c3e50;
-    --background-color: #f4f6f9;
+    --background-color: #f4f6f9; /* Fundo mais suave */
     --card-bg-color: #ffffff;
     --text-color: #333;
-    --light-text-color: #ecf0f1;
+    --light-text-color: #ffffff;
     --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     --border-radius: 8px;
 }
@@ -17,7 +17,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
@@ -31,15 +31,17 @@ body {
 
 /* Header */
 .header {
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    background-color: var(--secondary-color);
     color: var(--light-text-color);
     padding: 2rem 0;
     text-align: center;
     margin-bottom: 2rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .header h1 {
     font-size: 2.5rem;
+    font-weight: 700;
     margin-bottom: 0.5rem;
 }
 
@@ -50,9 +52,9 @@ body {
     gap: 1rem;
     margin-bottom: 2rem;
     background-color: var(--card-bg-color);
-    padding: 1rem;
+    padding: 1.5rem;
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
+    border: 1px solid #e3e6e9;
 }
 
 .search-container input,
@@ -60,8 +62,16 @@ body {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #ddd;
-    border-radius: var(--border-radius);
+    border-radius: 6px;
     font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-container input:focus,
+.sort-container select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    outline: none;
 }
 
 /* Grid de Produtos */
@@ -79,6 +89,7 @@ body {
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e3e6e9;
 }
 
 .product-card:hover {
@@ -109,6 +120,7 @@ body {
     flex-grow: 1;
     margin-bottom: 1rem;
     color: #666;
+    font-size: 0.95rem;
 }
 
 .product-price {
@@ -117,10 +129,12 @@ body {
     color: var(--primary-color);
 }
 
-.loading-message {
+.loading-message, .error-message, .no-results-message {
     text-align: center;
     font-size: 1.2rem;
     color: #888;
+    grid-column: 1 / -1; /* Ocupa todas as colunas do grid */
+    padding: 2rem;
 }
 
 /* Footer */
@@ -128,17 +142,18 @@ body {
     background-color: var(--secondary-color);
     color: var(--light-text-color);
     text-align: center;
-    padding: 1.5rem 0;
+    padding: 2rem 0;
     margin-top: 3rem;
 }
+
 .admin-link {
     color: var(--primary-color);
     text-decoration: none;
+    font-weight: 600;
 }
 .admin-link:hover {
     text-decoration: underline;
 }
-
 
 /* Media Queries para Responsividade */
 @media (min-width: 600px) {
