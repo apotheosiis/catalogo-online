@@ -1,4 +1,14 @@
 <?php
+session_start();
+
+// Verifica se o usuário está logado. Se não, redireciona para a página de login.
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('Location: login.php');
+    exit; // É crucial parar a execução do script aqui
+}
+?>
+
+<?php
 // Simples "guarda" para futuras implementações de login
 // session_start();
 // if (!isset($_SESSION['loggedin'])) {

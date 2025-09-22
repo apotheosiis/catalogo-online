@@ -11,6 +11,8 @@
     <header class="header">
         <div class="container">
             <h1>TechShop</h1>
+            <h1>Gerenciamento de Produtos</h1>
+<a href="logout.php" style="float:right; margin:10px;">Sair</a>
             <p>Os melhores produtos de tecnologia você encontra aqui.</p>
         </div>
     </header>
