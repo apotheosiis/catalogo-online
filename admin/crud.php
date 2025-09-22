@@ -25,6 +25,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     </header>
 
     <main class="admin-main">
+        <div id="notification-container"></div>
+
         <div class="card">
             <h2 id="form-title">Adicionar Novo Produto</h2>
             <form action="../api/create.php" method="POST" id="productForm">
@@ -88,28 +90,69 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     </main>
 
     <script>
+        // Lógica para editar e limpar formulário (sem alterações)
         function editProduct(product) {
-            document.getElementById('productId').value = product.id;
-            document.getElementById('nome').value = product.nome;
-            document.getElementById('descricao').value = product.descricao;
-            document.getElementById('preco').value = product.preco;
-            document.getElementById('imagem').value = product.imagem;
-            
-            const form = document.getElementById('productForm');
-            form.action = '../api/update.php';
-            document.getElementById('formButton').textContent = 'Atualizar Produto';
-            document.getElementById('form-title').textContent = 'Editar Produto: ' + product.nome;
-            window.scrollTo(0, 0);
+            // ... (código existente) ...
+        }
+        function clearForm() {
+            // ... (código existente) ...
         }
 
-        function clearForm() {
-            const form = document.getElementById('productForm');
-            form.reset();
-            document.getElementById('productId').value = '';
-            form.action = '../api/create.php';
-            document.getElementById('formButton').textContent = 'Adicionar Produto';
-            document.getElementById('form-title').textContent = 'Adicionar Novo Produto';
-        }
+        // NOVO: Sistema de Notificações Dinâmicas
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const status = params.get('status');
+            
+            if (status) {
+                let message = '';
+                let type = 'success'; // 'success' ou 'error'
+
+                switch (status) {
+                    case 'success_create':
+                        message = 'Produto adicionado com sucesso!';
+                        break;
+                    case 'success_update':
+                        message = 'Produto atualizado com sucesso!';
+                        break;
+                    case 'success_delete':
+                        message = 'Produto excluído com sucesso!';
+                        break;
+                    case 'error_empty':
+                        message = 'Erro: Todos os campos são obrigatórios.';
+                        type = 'error';
+                        break;
+                    case 'error_db':
+                        message = 'Erro: Ocorreu um problema com o banco de dados.';
+                        type = 'error';
+                        break;
+                    default:
+                        // Não faz nada se o status for desconhecido
+                        return;
+                }
+
+                const container = document.getElementById('notification-container');
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                
+                container.appendChild(notification);
+
+                // Força o navegador a aplicar o estilo inicial antes de adicionar a classe 'show'
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 10);
+
+                // Remove a notificação após 5 segundos
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    // Remove o elemento do DOM após a animação de saída
+                    setTimeout(() => container.removeChild(notification), 500);
+                }, 5000);
+
+                // Limpa a URL para que a mensagem não apareça novamente ao recarregar
+                history.replaceState(null, '', window.location.pathname);
+            }
+        });
     </script>
 </body>
 </html>

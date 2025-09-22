@@ -195,3 +195,29 @@ table .actions form {
     border: none;
     display: inline-block;
 }
+
+/* --- Estilos de Notificação de Feedback --- */
+.notification {
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius);
+    color: var(--admin-light);
+    font-weight: 600;
+    margin: 0 2rem 1.5rem 2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    opacity: 0; /* Começa invisível */
+    transform: translateY(-20px); /* Começa um pouco acima */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification.success {
+    background-color: var(--admin-success);
+}
+
+.notification.error {
+    background-color: var(--admin-danger);
+}
