@@ -35,7 +35,7 @@ Siga os passos abaixo para rodar o projeto localmente.
 1.  **Clone o Repositório**
     Navegue até o diretório `htdocs` do seu XAMPP/LAMPP (geralmente `/opt/lampp/htdocs/` no Linux ou `C:/xampp/htdocs/` no Windows) e clone o projeto:
     ```bash
-    git clone <URL_DO_SEU_REPOSITORIO> catalogo-produtos
+    git clone <URL_DO_REPOSITORIO> catalogo-produtos
     cd catalogo-produtos
     ```
 
