@@ -3,7 +3,7 @@
 **Nome do Projeto:** Plataforma de Pré-Venda TechShop
 **Versão do Documento:** 2.0
 **Data:** 23 de setembro de 2025
-**Autor:** [Seu Nome Aqui]
+**Autor:** Marllus Monteiro
 
 ---
 
