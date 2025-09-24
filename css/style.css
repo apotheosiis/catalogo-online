@@ -410,3 +410,195 @@ body {
 .contact-tooltip p strong {
     color: var(--secondary-color);
 }
+
+.product-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block; /* Garante que o link ocupe o espaço do card */
+}
+
+/* --- Estilos da Página de Produto Individual --- */
+.produto-container { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 2rem; 
+    margin-top: 2rem; 
+    background-color: var(--card-bg-color);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    border: 1px solid #e3e6e9;
+}
+
+.produto-imagem-grande { flex: 1 1 400px; }
+
+.produto-imagem-grande img { 
+    width: 100%; 
+    border-radius: var(--border-radius); 
+}
+
+.produto-detalhes { flex: 1 1 400px; }
+
+.produto-detalhes h1 { 
+    font-size: 2.5rem; 
+    margin-bottom: 1rem; 
+    color: var(--secondary-color);
+}
+
+.produto-detalhes .preco { 
+    font-size: 2.2rem; 
+    color: var(--primary-color); 
+    font-weight: bold; 
+    margin-bottom: 1.5rem; 
+}
+
+.produto-detalhes .descricao { 
+    font-size: 1.1rem; 
+    line-height: 1.7; 
+    margin-bottom: 2rem; 
+}
+
+.compra-box { 
+    display: flex; 
+    gap: 1rem; 
+    align-items: center; 
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.compra-box label { font-weight: bold; }
+
+.quantidade-input { 
+    width: 70px; 
+    padding: 0.8rem; 
+    font-size: 1rem; 
+    text-align: center; 
+    border-radius: 6px; 
+    border: 1px solid #ddd;
+}
+
+.btn-comprar { 
+    padding: 1rem 2rem; 
+    font-size: 1.2rem; 
+    /* Corrigido: Cor de fundo verde visível por padrão */
+    background-color: #28a745; /* Usando a cor de sucesso diretamente */
+    color: white !important; /* !important para garantir que o texto seja branco */
+    border: none; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    transition: background-color 0.2s; 
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none; /* Garante que não haja sublinhado se usado em um link */
+}
+
+.btn-comprar:hover { 
+    background-color: #218838; /* Verde mais escuro no hover */
+}
+
+.btn-comprar:hover { background-color: #218838; } /* Verde mais escuro no hover */
+
+/* --- Estilos da Tabela do Carrinho --- */
+.tabela-carrinho {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+}
+.tabela-carrinho th, .tabela-carrinho td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    vertical-align: middle;
+}
+.tabela-carrinho thead th {
+    background-color: #f8f9fa;
+}
+.tabela-carrinho input[type="number"] {
+    width: 60px;
+    padding: 0.5rem;
+    text-align: center;
+}
+.tabela-carrinho button {
+    background: none;
+    border: none;
+    color: var(--admin-danger);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.carrinho-total {
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius);
+    text-align: right;
+}
+
+/* --- Estilos para o Modal de Sucesso do Pedido --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s;
+}
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-content {
+    background-color: white;
+    padding: 3rem;
+    border-radius: 12px;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+.checkmark-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 3;
+    stroke: #28a745;
+    stroke-miterlimit: 10;
+    margin: 0 auto 1.5rem auto;
+    box-shadow: inset 0px 0px 0px #28a745;
+    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+.checkmark-icon__circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 3;
+    stroke-miterlimit: 10;
+    stroke: #28a745;
+    fill: none;
+    animation: stroke .6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.checkmark-icon__check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke .3s cubic-bezier(0.65, 0, 0.45, 1) .8s forwards;
+}
+@keyframes stroke { 100% { stroke-dashoffset: 0; } }
+@keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+@keyframes fill { 100% { box-shadow: inset 0px 0px 0px 40px #28a745; } }
+.modal-content h2 { font-size: 1.8rem; margin-bottom: 1rem; color: var(--secondary-color); }
+.modal-content p { margin-bottom: 2rem; font-size: 1.1rem; }
+
+.categories-nav a.active {
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+}

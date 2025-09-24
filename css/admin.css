@@ -106,12 +106,13 @@ form label {
 }
 
 form input[type="text"],
-form input[type="password"], /* Adicionado password aqui para garantir consistência */
+form input[type="password"],
 form input[type="number"],
+form input[type="email"], /* Adicionado para consistência */
 form textarea {
     width: 100%;
     padding: 0.75rem;
-    margin-bottom: 1.5rem; /* Aumentado espaço */
+    margin-bottom: 1.5rem;
     border: 1px solid #ced4da;
     border-radius: 4px;
     font-size: 1rem;
@@ -218,6 +219,25 @@ table .actions form {
     background-color: var(--admin-success);
 }
 
-.notification.error {
+.notification.error, .login-box .error {
     background-color: var(--admin-danger);
+    color: var(--admin-light); /* Garante que o texto seja branco/claro */
+    /* ... outros estilos que já estavam lá, como padding e border ... */
 }
+
+.notification {
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    color: var(--admin-light);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.notification.success { background-color: var(--admin-success); }
+.notification.error { background-color: var(--admin-danger); }

@@ -1,8 +1,9 @@
 <?php
 session_start();
 
+// VERIFICAÇÃO ATUALIZADA
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header('Location: login.php');
+    header('Location: painel-acesso.php');
     exit;
 }
 ?>
@@ -31,19 +32,19 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             <h2 id="form-title">Adicionar Novo Produto</h2>
             <form action="../api/create.php" method="POST" id="productForm">
                 <input type="hidden" name="id" id="productId">
-                
+
                 <label for="nome">Nome do Produto:</label>
                 <input type="text" name="nome" id="nome" required>
-                
+
                 <label for="descricao">Descrição:</label>
                 <textarea name="descricao" id="descricao" rows="4" required></textarea>
-                
+
                 <label for="preco">Preço (ex: 1250.99):</label>
                 <input type="number" name="preco" id="preco" step="0.01" required>
 
                 <label for="imagem">Nome do Arquivo da Imagem (ex: mouse.jpg):</label>
                 <input type="text" name="imagem" id="imagem" required>
-                
+
                 <div class="form-actions">
                     <button type="submit" id="formButton" class="btn btn-primary">Adicionar Produto</button>
                     <button type="button" onclick="clearForm()" class="btn btn-secondary">Cancelar Edição</button>
@@ -90,22 +91,36 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     </main>
 
     <script>
-        // Lógica para editar e limpar formulário (sem alterações)
         function editProduct(product) {
-            // ... (código existente) ...
-        }
-        function clearForm() {
-            // ... (código existente) ...
+            document.getElementById('productId').value = product.id;
+            document.getElementById('nome').value = product.nome;
+            document.getElementById('descricao').value = product.descricao;
+            document.getElementById('preco').value = product.preco;
+            document.getElementById('imagem').value = product.imagem;
+
+            const form = document.getElementById('productForm');
+            form.action = '../api/update.php';
+            document.getElementById('formButton').textContent = 'Atualizar Produto';
+            document.getElementById('form-title').textContent = 'Editar Produto: ' + product.nome;
+            window.scrollTo(0, 0);
         }
 
-        // NOVO: Sistema de Notificações Dinâmicas
+        function clearForm() {
+            const form = document.getElementById('productForm');
+            form.reset();
+            document.getElementById('productId').value = '';
+            form.action = '../api/create.php';
+            document.getElementById('formButton').textContent = 'Adicionar Produto';
+            document.getElementById('form-title').textContent = 'Adicionar Novo Produto';
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const params = new URLSearchParams(window.location.search);
             const status = params.get('status');
-            
+
             if (status) {
                 let message = '';
-                let type = 'success'; // 'success' ou 'error'
+                let type = 'success';
 
                 switch (status) {
                     case 'success_create':
@@ -126,7 +141,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                         type = 'error';
                         break;
                     default:
-                        // Não faz nada se o status for desconhecido
                         return;
                 }
 
@@ -134,22 +148,18 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 const notification = document.createElement('div');
                 notification.className = `notification ${type}`;
                 notification.textContent = message;
-                
+
                 container.appendChild(notification);
 
-                // Força o navegador a aplicar o estilo inicial antes de adicionar a classe 'show'
                 setTimeout(() => {
                     notification.classList.add('show');
                 }, 10);
 
-                // Remove a notificação após 5 segundos
                 setTimeout(() => {
                     notification.classList.remove('show');
-                    // Remove o elemento do DOM após a animação de saída
                     setTimeout(() => container.removeChild(notification), 500);
                 }, 5000);
 
-                // Limpa a URL para que a mensagem não apareça novamente ao recarregar
                 history.replaceState(null, '', window.location.pathname);
             }
         });

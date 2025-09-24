@@ -1,7 +1,7 @@
 # Documento de Visão do Projeto (DVP) - TechShop
 
 **Nome do Projeto:** Plataforma de Pré-Venda TechShop
-**Versão do Documento:** 2.0
+**Versão do Documento:** 2.1
 **Data:** 23 de setembro de 2025
 **Autor:** Marllus Monteiro
 
@@ -76,57 +76,56 @@ Pequenos e médios varejistas de tecnologia necessitam de uma plataforma online 
 ## 4. Recursos do Produto (Funcionalidades)
 
 ### 4.1. Funcionalidades Públicas Gerais
-* **FG.01 - Visualização Responsiva:** O layout do site se adapta perfeitamente a qualquer dispositivo (mobile-first).
-* **FG.02 - Listagem de Produtos:** A página inicial exibe todos os produtos ativos do catálogo.
-* **FG.03 - Busca e Filtro em Tempo Real:** Barra de pesquisa que filtra produtos por nome ou descrição instantaneamente.
-* **FG.04 - Ordenação Dinâmica:** Seletor para reordenar produtos por preço e nome.
-* **FG.05 - Navegação Intuitiva:** Cabeçalho com ícones de acesso rápido e barra de navegação por categorias.
-* **FG.06 - Rodapé Completo:** Rodapé com informações institucionais, redes sociais e formas de pagamento.
-* **FG.07 - Captura de Newsletter:** Seção dedicada para que visitantes se inscrevam para receber ofertas.
+* **FG.01 - Visualização Responsiva:** O layout do site se adapta a qualquer dispositivo (mobile-first).
+* **FG.02 - Listagem de Produtos:** A página inicial exibe todos os produtos do catálogo.
+* **FG.03 - Página de Produto Dedicada:** Cada produto possui uma página individual com detalhes, seletor de quantidade e botão para adicionar ao carrinho.
+* **FG.04 - Filtro por Categoria:** Navegação funcional por categorias que atualiza a lista de produtos.
+* **FG.05 - Busca e Ordenação em Tempo Real:** Ferramentas que operam no lado do cliente para máxima velocidade.
+* **FG.06 - Navegação Consistente:** Cabeçalho e rodapé completos e consistentes em todas as páginas públicas, com logo clicável para a home e links de navegação.
 
 ### 4.2. Funcionalidades da Conta do Cliente
-* **FC.01 - Cadastro e Login de Clientes:** Sistema seguro para criação e acesso a contas de cliente.
-* **FC.02 - Adição e Remoção de Itens do Carrinho:** Botões para manipular o carrinho de compras.
-* **FC.03 - Carrinho de Compras Persistente:** O carrinho de compras é salvo e associado à conta do cliente entre diferentes sessões.
-* **FC.04 - Página de Carrinho Detalhada:** Página para revisar itens, ajustar quantidades e ver subtotais.
-* **FC.05 - Envio de Solicitação de Compra:** Formulário para confirmar o pedido, selecionar uma forma de pagamento sugerida e informar um horário preferencial para entrega/retirada.
-* **FC.06 - Histórico de Pedidos:** Área na conta do cliente para visualizar solicitações de compra já enviadas.
+* **FC.01 - Autenticação de Cliente:** Fluxo completo e seguro para cadastro, login e logout de clientes.
+* **FC.02 - Carrinho de Compras Persistente:** O carrinho é salvo na conta do cliente e pode ser acessado em diferentes sessões.
+* **FC.03 - Gerenciamento do Carrinho:** Página dedicada (`carrinho.php`) para visualizar, atualizar quantidades e remover itens do carrinho.
+* **FC.04 - Simulação de Envio de Pedido:** Ao finalizar, o cliente recebe uma notificação de sucesso e seu carrinho é automaticamente esvaziado, completando o ciclo de "pré-venda".
+* **FC.05 - Acesso Restrito:** As páginas "Minha Conta" e "Carrinho" só podem ser acessadas por clientes logados.
+* **FC.06 - Painel "Minha Conta":** (Pendente) Uma página dedicada para o cliente visualizar seu histórico de pedidos e gerenciar seus dados.
 
 ### 4.3. Funcionalidades Administrativas
-* **FA.01 - Acesso via Login Seguro:** Painel restrito e protegido por autenticação robusta.
+* **FA.01 - Acesso via Login Seguro:** Acesso ao painel restrito por uma URL não pública, com proteção contra força bruta.
 * **FA.02 - Gerenciamento de Produtos (CRUD):** Interface completa para criar, visualizar, atualizar e deletar produtos.
-* **FA.03 - Visualização de Pedidos dos Clientes:** Seção para o administrador ver todas as solicitações de compra recebidas com informações chave (cliente, data, valor, status).
-* **FA.04 - Detalhes do Pedido:** Visualização detalhada de cada pedido (produtos, quantidades, pagamento, horário).
-* **FA.05 - Notificações de Feedback:** Mensagens visuais informam o administrador sobre o sucesso ou falha de suas ações.
+* **FA.03 - Notificações de Feedback:** Mensagens visuais informam o administrador sobre o sucesso ou falha de suas ações.
+* **FA.04 - Visualização de Pedidos:** (Pendente) Seção futura no painel para o administrador visualizar as solicitações de compra enviadas pelos clientes.
 
 ---
 
 ## 5. Requisitos Não-Funcionais
 
-| Categoria            | Requisito                                                                                                                                                                                                                                                                                          |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Desempenho** | **1. Carregamento Inicial:** O tempo de carregamento da página principal deve ser otimizado.<br>**2. Interatividade:** Ações do usuário logado (login, adição ao carrinho) devem ter uma resposta rápida.                                                                                         |
-| **Segurança** | **1. Injeção de SQL:** Proteção com Prepared Statements (PDO).<br>**2. Hashing de Senhas:** Senhas armazenadas com hash seguro (`password_hash`).<br>**3. Força Bruta:** Login do admin protegido com limite de tentativas.<br>**4. Sequestro de Sessão:** ID da sessão regenerado após o login.<br>**5. Vazamento de Credenciais:** Senhas do BD mantidas em arquivo `.env`.<br>**6. XSS:** Saída de dados tratada com `htmlspecialchars()`.<br>**7. Validação Server-Side:** Dados de formulários validados no backend. |
-| **Usabilidade** | A interface deve ser limpa, intuitiva e responsiva (mobile-first) em todas as áreas do sistema.                                                                                                                                                                                                      |
-| **Privacidade de Dados** | O sistema deve garantir a privacidade dos dados do cliente, armazenando senhas de forma segura e não expondo informações pessoais.                                                                                                                                                                 |
-| **Escalabilidade** | A arquitetura do sistema deve permitir a futura integração de novas funcionalidades, como um sistema de pagamento online.                                                                                                                                                                                |
+| Categoria            | Requisito                                                                                                                                                                                                                                                                                                                              |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Desempenho** | **1. Carregamento Inicial:** O tempo de carregamento da página principal deve ser otimizado.<br>**2. Interatividade:** Ações do usuário logado (login, adição ao carrinho) devem ter uma resposta rápida.                                                                                                                                   |
+| **Segurança** | **1. Injeção de SQL:** Proteção com Prepared Statements (PDO).<br>**2. Hashing de Senhas:** Senhas armazenadas com hash seguro (`password_hash`).<br>**3. Força Bruta:** Login do admin protegido com limite de tentativas.<br>**4. Sequestro de Sessão:** ID da sessão regenerado após o login.<br>**5. Vazamento de Credenciais:** Senhas do BD mantidas em arquivo `.env`.<br>**6. XSS:** Saída de dados tratada com `htmlspecialchars()`.<br>**7. Validação Server-Side:** Dados de formulários validados no backend.<br>**8. Prevenção de Listagem de Diretório:** A pasta `/admin` é protegida com `.htaccess`. |
+| **Usabilidade** | A interface deve ser limpa, intuitiva e responsiva (mobile-first) em todas as áreas do sistema, com navegação consistente.                                                                                                                                                                                                              |
+| **Privacidade de Dados** | O sistema deve garantir a privacidade dos dados do cliente, armazenando senhas de forma segura e não expondo informações pessoais.                                                                                                                                                                                                     |
+| **Escalabilidade** | A arquitetura do sistema deve permitir a futura integração de novas funcionalidades, como um sistema de pagamento online.                                                                                                                                                                                                                  |
 
 ---
 
 ## 6. Escopo do Projeto e Limitações
 
 ### 6.1. Dentro do Escopo
-* Todas as funcionalidades listadas na Seção 4.
+* Todas as funcionalidades listadas como implementadas na Seção 4.
 * Criação de contas de cliente e um único administrador.
-* Envio de solicitações de compra para visualização do administrador.
+* Envio de solicitações de compra que limpam o carrinho e notificam o usuário (sem salvar o pedido para o admin nesta fase).
 
 ### 6.2. Fora do Escopo
-* Integração com gateways de pagamento real (PagSeguro, Stripe, etc.).
-* Cálculo automático de frete com base no CEP.
+* Integração com gateways de pagamento real.
+* Cálculo automático de frete.
 * Múltiplos níveis de permissão para administradores.
 * Funcionalidade real de envio de e-mails automáticos.
-* Sistema de avaliação e comentários de produtos pelos clientes.
+* Sistema de avaliação e comentários de produtos.
 * Gerenciamento de estoque.
+* Salvar e exibir o histórico de pedidos para cliente e admin.
 
 ---
 
@@ -143,21 +142,34 @@ Pequenos e médios varejistas de tecnologia necessitam de uma plataforma online 
 ```
 /catalogo-produtos/
 |-- index.php
+|-- produto.php
+|-- carrinho.php
+|-- minha-conta.php
+|-- login_cliente.php
+|-- registro.php
+|-- auth_cliente.php
+|-- registrar_cliente.php
+|-- logout_cliente.php
 |-- admin/
-|   |-- crud.php, login.php, logout.php, auth.php
+|   |-- painel-acesso.php
+|   |-- crud.php
+|   |-- auth.php
+|   |-- logout.php
+|   |-- .htaccess
 |-- api/
-|   |-- create.php, read.php, update.php, delete.php
+|   |-- read.php
+|   |-- carrinho_api.php
+|   |-- create.php, update.php, delete.php
 |-- config/
 |   |-- db.php
 |-- css/
 |   |-- style.css, admin.css
 |-- js/
-|   |-- script.js
+|   |-- script.js, notifications.js
 |-- imagens/
 |-- sql/
 |   |-- database.sql
-|-- .env
-|-- .gitignore
-|-- README.md
+|-- .env, .env.example
 |-- DVP.md
+|-- README.md
 ```

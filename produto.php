@@ -1,12 +1,32 @@
 <?php
 session_start();
+require_once 'config/db.php';
+
+// Pega o ID do produto da URL de forma segura
+$produto_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+if (!$produto_id) {
+    header('Location: index.php');
+    exit;
+}
+
+// Busca os detalhes do produto no banco de dados
+$pdo = getDbConnection();
+$stmt = $pdo->prepare("SELECT * FROM produtos WHERE id = ?");
+$stmt->execute([$produto_id]);
+$produto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Se o produto não for encontrado, redireciona para a home
+if (!$produto) {
+    header('Location: index.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Produtos de Tecnologia</title>
+    <title><?php echo htmlspecialchars($produto['nome']); ?> - TechShop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -16,15 +36,15 @@ session_start();
         <div class="container">
             <nav class="top-bar-nav">
                 
-                <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): // Prioridade para o ADMIN ?>
+                <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
                     <a href="admin/crud.php"><i class="fas fa-user-shield"></i> <span>Painel Admin</span></a>
                     <a href="admin/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Sair (Admin)</span></a>
 
-                <?php elseif (isset($_SESSION['cliente_loggedin']) && $_SESSION['cliente_loggedin'] === true): // Se não for admin, checa se é CLIENTE ?>
+                <?php elseif (isset($_SESSION['cliente_loggedin']) && $_SESSION['cliente_loggedin'] === true): ?>
                     <a href="minha-conta.php"><i class="fas fa-user"></i> <span>Olá, <?php echo htmlspecialchars(explode(' ', $_SESSION['cliente_nome'])[0]); ?></span></a>
                     <a href="logout_cliente.php"><i class="fas fa-sign-out-alt"></i> <span>Sair</span></a>
                 
-                <?php else: // Se não for nenhum dos dois, é VISITANTE ?>
+                <?php else: ?>
                     <a href="login_cliente.php"><i class="fas fa-user"></i> <span>Minha Conta</span></a>
                 <?php endif; ?>
                 
@@ -44,7 +64,6 @@ session_start();
             </nav>
         </div>
     </div>
-
     <header class="header">
         <div class="container">
             <a href="index.php" style="text-decoration: none; color: inherit;"><h1>TechShop</h1></a>
@@ -53,50 +72,29 @@ session_start();
     </header>
 
     <main class="container">
-        <section class="filters">
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Buscar por nome ou descrição...">
+        <a href="index.php" class="btn-voltar" style="margin: 2rem 0; display: inline-block; text-decoration: none; background-color: #6c757d; color: white; padding: 0.5rem 1rem; border-radius: 6px; transition: background-color 0.2s;">&larr; Voltar ao Catálogo</a>
+
+        <div class="produto-container">
+            <div class="produto-imagem-grande">
+                <img src="imagens/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>">
             </div>
-            <div class="sort-container">
-                <label for="sortOptions">Ordenar por:</label>
-                <select id="sortOptions">
-                    <option value="name-asc">Nome (A-Z)</option>
-                    <option value="name-desc">Nome (Z-A)</option>
-                    <option value="price-asc">Preço (Menor)</option>
-                    <option value="price-desc">Preço (Maior)</option>
-                </select>
+            <div class="produto-detalhes">
+                <h1><?php echo htmlspecialchars($produto['nome']); ?></h1>
+                <p class="preco">R$ <?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
+                <h2>Descrição</h2>
+                <p class="descricao"><?php echo nl2br(htmlspecialchars($produto['descricao'])); ?></p>
+
+                <div class="compra-box">
+                    <label for="quantidade">Qtd:</label>
+                    <input type="number" id="quantidade" value="1" min="1" class="quantidade-input">
+                    <button class="btn btn-comprar" onclick="adicionarAoCarrinho(<?php echo $produto['id']; ?>)">
+                        <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+                    </button>
+                </div>
             </div>
-        </section>
-
-        <section class="categories">
-            <nav class="categories-nav">
-                <ul>
-                    <li><a href="#" onclick="filterByCategory('Acessórios'); return false;">Acessórios</a></li>
-                    <li><a href="#" onclick="filterByCategory('Games'); return false;">Games</a></li>
-                    <li><a href="#" onclick="filterByCategory('Computadores'); return false;">Computadores</a></li>
-                    <li><a href="#" onclick="filterByCategory('Hardware'); return false;">Hardware</a></li>
-                    <li><a href="#" onclick="filterByCategory('Periféricos'); return false;">Periféricos</a></li>
-                    <li><a href="#" onclick="filterByCategory(null); return false;" class="active">Ver Todos</a></li>
-                </ul>
-            </nav>
-        </section>
-
-        <section id="product-grid" class="product-grid">
-            <p class="loading-message">Carregando produtos...</p>
-        </section>
-    </main>
-
-    <section class="newsletter-signup">
-        <div class="container">
-            <h3>Receba nossas ofertas por e-mail!</h3>
-            <p>Fique por dentro das últimas novidades e promoções exclusivas.</p>
-            <form class="newsletter-form">
-                <input type="email" placeholder="Digite seu melhor e-mail" required>
-                <button type="submit">Enviar</button>
-            </form>
         </div>
-    </section>
-
+    </main>
+    
     <footer class="footer">
         <div class="container">
             <div class="footer-main">
@@ -140,7 +138,31 @@ session_start();
             </div>
         </div>
     </footer>
-
-    <script src="js/script.js"></script>
+    
+    <script>
+    function adicionarAoCarrinho(produtoId) {
+        const quantidade = document.getElementById('quantidade').value;
+        
+        fetch('carrinho_api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'add', produto_id: produtoId, quantidade: quantidade })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Produto adicionado ao carrinho com sucesso!');
+            } else {
+                if (data.redirect) {
+                    // Redireciona para o login se não estiver logado
+                    window.location.href = data.redirect;
+                } else {
+                    // Mostra outros erros
+                    alert('Erro ao adicionar produto: ' + data.message);
+                }
+            }
+        });
+    }
+    </script>
 </body>
 </html>
