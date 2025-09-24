@@ -6,7 +6,7 @@ require_once 'config/db.php';
 
 // --- Configurações ---
 $admin_username = 'admin';
-$admin_password = 'admin123'; // A senha que você quer definir
+$admin_password = '123'; // <<< MUDANÇA AQUI: Nova senha definida como '123' >>>
 
 echo "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><title>Setup Admin</title>";
 echo "<style>body { font-family: sans-serif; padding: 20px; } .success { color: green; font-weight: bold; } .error { color: red; font-weight: bold; }</style></head><body>";
@@ -19,7 +19,7 @@ if (!$password_hash) {
     die("<p class='error'>Erro crítico: A função password_hash() não está funcionando corretamente.</p></body></html>");
 }
 
-echo "<p>Tentando configurar o usuário: <strong>{$admin_username}</strong> com a senha: <strong>{$admin_password}</strong></p>";
+echo "<p>Tentando configurar o usuário: <strong>{$admin_username}</strong> com a nova senha: <strong>{$admin_password}</strong></p>";
 
 try {
     $pdo = getDbConnection();
@@ -45,7 +45,8 @@ try {
 
     echo "<hr>";
     echo "<p><strong>Próximos Passos:</strong></p>";
-    echo "<ol><li>Tente fazer o login novamente na <a href='admin/painel-acesso.php'>página de acesso do admin</a>.</li>";
+    echo "<ol><li>Limpe os cookies do seu navegador para 'localhost' para remover o bloqueio de tentativas.</li>";
+    echo "<li>Tente fazer o login novamente na <a href='admin/painel-acesso.php'>página de acesso do admin</a> com a nova senha.</li>";
     echo "<li>Após confirmar que o login funciona, <strong>DELETE ESTE ARQUIVO (setup_admin.php)</strong> do seu servidor imediatamente.</li></ol>";
 
 } catch (PDOException $e) {
