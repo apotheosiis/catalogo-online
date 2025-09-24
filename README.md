@@ -77,6 +77,9 @@ Siga os passos abaixo para configurar e executar o projeto na sua máquina.
     * No diretório do projeto, renomeie o arquivo `.env.example` para `.env`.
     * Abra o arquivo `.env` e verifique se as credenciais correspondem à sua configuração do MySQL (a configuração padrão do XAMPP geralmente já está correta).
 
+5. **Execute o setup_admin.php
+    *Digite a url: `http://localhost/catalogo-online/setup_admin.php`
+    *Após isso, exclua este arquivo.
 ---
 
 ## 🔑 Acesso e Credenciais Padrão
