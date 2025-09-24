@@ -6,7 +6,7 @@ require_once 'config/db.php';
 
 // --- Configurações ---
 $admin_username = 'admin';
-$admin_password = '123'; // A senha que você quer definir
+$admin_password = 'admin123'; // A senha que você quer definir
 
 echo "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><title>Setup Admin</title>";
 echo "<style>body { font-family: sans-serif; padding: 20px; } .success { color: green; font-weight: bold; } .error { color: red; font-weight: bold; }</style></head><body>";
