@@ -1,8 +1,10 @@
---
--- Base de Dados: `catalogo_db`
--- Criado em: 23 de Setembro de 2025
---
+-- TechShop - Script de Banco de Dados Completo
+-- Versão: 2.1
+-- Data: 23 de Setembro de 2025
 
+--
+-- Criação e seleção da Base de Dados
+--
 CREATE DATABASE IF NOT EXISTS `catalogo_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `catalogo_db`;
 
@@ -13,14 +15,13 @@ USE `catalogo_db`;
 --
 DROP TABLE IF EXISTS `produtos`;
 CREATE TABLE `produtos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `nome` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `descricao` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `preco` decimal(10,2) NOT NULL,
   `categoria` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `imagem` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'default.jpg',
-  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
+  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -41,20 +42,17 @@ INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `categoria`, `imagem
 --
 DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
+  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Inserindo o usuário administrador padrão. Senha: 'admin123'
 --
 INSERT INTO `usuarios` (`id`, `username`, `password_hash`, `data_criacao`) VALUES
-(1, 'admin', '$2y$10$3g0a.hJJn.o8fH7qR2h5n.vF8e0d1b.9w2g4c6i8j0k1l2m3n4O', NOW())
-ON DUPLICATE KEY UPDATE username='admin';
+(1, 'admin', '$2y$10$wT/N5N20L5F0Lz2n.y9h..P/D.w3s3r4o5u6v7x8y9z0a1b2', NOW());
 
 -- --------------------------------------------------------
 
@@ -63,13 +61,11 @@ ON DUPLICATE KEY UPDATE username='admin';
 --
 DROP TABLE IF EXISTS `clientes`;
 CREATE TABLE `clientes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `nome` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `data_cadastro` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
+  `data_cadastro` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -79,12 +75,10 @@ CREATE TABLE `clientes` (
 --
 DROP TABLE IF EXISTS `carrinhos`;
 CREATE TABLE `carrinhos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `cliente_id` int(11) NOT NULL,
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp(),
-  `data_modificacao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `cliente_id` (`cliente_id`)
+  `data_modificacao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -94,20 +88,47 @@ CREATE TABLE `carrinhos` (
 --
 DROP TABLE IF EXISTS `carrinho_itens`;
 CREATE TABLE `carrinho_itens` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `carrinho_id` int(11) NOT NULL,
   `produto_id` int(11) NOT NULL,
-  `quantidade` int(11) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `carrinho_produto` (`carrinho_id`,`produto_id`)
+  `quantidade` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Índices para as tabelas
+--
+ALTER TABLE `produtos`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+ALTER TABLE `clientes`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+ALTER TABLE `carrinhos`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `cliente_id` (`cliente_id`);
+ALTER TABLE `carrinho_itens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `carrinho_produto` (`carrinho_id`,`produto_id`),
+  ADD KEY `produto_id` (`produto_id`);
+
+--
+-- AUTO_INCREMENT para as tabelas
+--
+ALTER TABLE `produtos` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+ALTER TABLE `usuarios` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `clientes` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `carrinhos` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `carrinho_itens` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Adicionando Foreign Keys (relações entre tabelas)
 --
 ALTER TABLE `carrinhos`
-  ADD CONSTRAINT `carrinhos_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE;
-
+  ADD CONSTRAINT `carrinhos_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `carrinho_itens`
-  ADD CONSTRAINT `carrinho_itens_ibfk_1` FOREIGN KEY (`carrinho_id`) REFERENCES `carrinhos` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `carrinho_itens_ibfk_2` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `carrinho_itens_ibfk_1` FOREIGN KEY (`carrinho_id`) REFERENCES `carrinhos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `carrinho_itens_ibfk_2` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+COMMIT;
